@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "esbenp.prettier-vscode",        // Prettier
+    "dbaeumer.vscode-eslint",        // ESLint
+    "prisma.prisma",                 // Prisma syntax highlighting
+    "bradlc.vscode-tailwindcss",     // Tailwind intellisense
+    "ms-vscode.vscode-typescript-next", // TS/JS tooling
+    "streetsidesoftware.code-spell-checker" // Spell check (opcional)
+  ]
+}
