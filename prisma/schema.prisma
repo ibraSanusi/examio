@@ -37,6 +37,7 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  username      String?   @unique
   email         String?   @unique
   emailVerified DateTime?
   image         String?
@@ -44,6 +45,10 @@ model User {
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+
+  grade         String?
+  age           String?
+  exams         Exam[]
 }
 
 model VerificationRequest {
@@ -55,4 +60,13 @@ model VerificationRequest {
   updatedAt  DateTime @updatedAt
 
   @@unique([identifier, token])
+}
+
+model Exam {
+  id_examen   String   @id @default(cuid()) // cuid() genera un string único
+  chat_examen String
+  createdAt   DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
 }
