@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start"
+    "start": "next start",
+    "generate:db": "npx prisma generate",
+    "migrate:db": "npx prisma migrate dev --name "
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.7",
