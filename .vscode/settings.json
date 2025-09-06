@@ -1,6 +1,5 @@
 {
   "editor.formatOnSave": true,
-
   "eslint.validate": ["javascript", "typescript", "typescriptreact", "javascriptreact"],
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
@@ -9,8 +8,8 @@
     "**/.next": true,
     "**/dist": true
   },
-  "prettier.singleQuote": true,
-  "prettier.semi": true,
+  "prettier.singleQuote": false,
+  "prettier.semi": false,
   "prettier.trailingComma": "all",
   "prettier.arrowParens": "always",
   "prettier.printWidth": 100,
