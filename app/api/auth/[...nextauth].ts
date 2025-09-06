@@ -1,21 +1,21 @@
 import NextAuth from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
+import DiscordProvider from "next-auth/providers/discord";
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import { prisma } from "@/lib"
 
 
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
+const discordClientId = process.env.DISCORD_CLIENT_ID;
+const discordClientSecret = process.env.DISCORD_CLIENT_SECRET;
 
-if (!googleClientId || !googleClientSecret) {
-  throw new Error("Faltan variables de entorno GOOGLE_CLIENT_ID o GOOGLE_CLIENT_SECRET");
+if (!discordClientId || !discordClientSecret) {
+  throw new Error("Faltan variables de entorno DISCORD_CLIENT_ID o DISCORD_CLIENT_SECRET");
 }
 
 export default NextAuth({
   providers: [
-    GoogleProvider({
-      clientId: googleClientId,
-      clientSecret: googleClientSecret,
+    DiscordProvider({
+      clientId: discordClientId,
+      clientSecret: discordClientSecret,
     }),
   ],
   adapter: PrismaAdapter(prisma),
