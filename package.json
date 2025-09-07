@@ -9,7 +9,8 @@
         "generate:db": "npx prisma generate",
         "migrate:db": "npx prisma migrate dev --name ",
         "lint": "eslint . --fix",
-        "postinstall": "prisma generate"
+        "postinstall": "prisma generate",
+        "test": "npx tsx test/**/*.test.ts"
     },
     "dependencies": {
         "@next-auth/prisma-adapter": "^1.0.7",
