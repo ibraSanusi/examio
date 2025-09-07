@@ -8,9 +8,20 @@ export default defineConfig([
   {
     files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     plugins: { js },
-    extends: ["js/recommended", "plugin:react/jsx-runtime"],
+    extends: ["js/recommended"],
+  },
+  {
+    files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
     languageOptions: { globals: { ...globals.browser, ...globals.node } },
   },
   tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  {
+    rules: {
+      "no-unused-vars": "warn",
+      "no-undef": "warn",
+      "react/react-in-jsx-scope": "off",
+      // "no-console": "warn",
+    },
+  },
 ])

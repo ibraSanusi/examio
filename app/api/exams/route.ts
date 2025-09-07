@@ -1,6 +1,5 @@
-import { prisma } from "@/lib"
-
 export async function GET(request: Request) {
+  console.log(request)
   // For example, fetch data from your DB here
   const users = [
     { id: 1, name: "Alice" },
