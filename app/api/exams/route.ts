@@ -1,11 +1,40 @@
-export async function GET(request: Request) {
-  console.log(request)
-  // For example, fetch data from your DB here
-  const users = [
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
-  ]
-  return new Response(JSON.stringify(users), {
+import { prisma } from "@/lib"
+import { ApiResponse } from "@/types/api"
+import { Exam } from "@/types/models"
+import { NextRequest } from "next/server"
+
+export async function GET(request: NextRequest): Promise<Response> {
+  const userId = request?.nextUrl?.searchParams.get("userId")
+
+  if (!userId) {
+    const errorResponse: ApiResponse<null> = {
+      success: false,
+      error: {
+        code: "USER_ID_REQUIRED",
+        message: "Se requiere el ID del usuario",
+      },
+    }
+    return new Response(JSON.stringify(errorResponse), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    })
+  }
+
+  // Conseguir todos los exámenes de userId.
+  const exams = await prisma.exam.findMany({
+    where: {
+      userId,
+    },
+  })
+
+  // Respuesta satisfactoria.
+  const successResponse: ApiResponse<Exam[]> = {
+    success: true,
+    data: exams,
+    message: "Se han obtenido correctamente los exámenes.",
+  }
+
+  return new Response(JSON.stringify(successResponse), {
     status: 200,
     headers: { "Content-Type": "application/json" },
   })

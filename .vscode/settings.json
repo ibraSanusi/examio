@@ -4,9 +4,10 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.exclude": {
-    "**/node_modules": false,
-    "**/.next": false,
-    "**/dist": false
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/.vercel": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false
