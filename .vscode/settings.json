@@ -5,8 +5,8 @@
   "files.insertFinalNewline": true,
   "files.exclude": {
     "**/node_modules": false,
-    "**/.next": true,
-    "**/dist": true
+    "**/.next": false,
+    "**/dist": false
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.detectIndentation": false
