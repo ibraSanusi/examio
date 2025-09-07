@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/login",
-        destination: "/auth/login", // elimina "pages" de la ruta, Next.js lo maneja automáticamente
+        destination: "/pages/auth/login", // elimina "pages" de la ruta, Next.js lo maneja automáticamente
       },
     ]
   },
