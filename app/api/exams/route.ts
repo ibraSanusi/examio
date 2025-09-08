@@ -1,54 +1,45 @@
-import { prisma } from "@/lib"
-import { ApiResponse } from "@/types/api"
-import { Exam } from "@/types/models"
-import { NextRequest } from "next/server"
+import OpenAI from "openai"
 
-export async function GET(request: NextRequest): Promise<Response> {
-  const userId = request?.nextUrl?.searchParams.get("userId")
-
-  if (!userId) {
-    const errorResponse: ApiResponse<null> = {
-      success: false,
-      error: {
-        code: "USER_ID_REQUIRED",
-        message: "Se requiere el ID del usuario",
-      },
-    }
-    return new Response(JSON.stringify(errorResponse), {
-      status: 400,
-      headers: { "Content-Type": "application/json" },
-    })
-  }
-
-  // Conseguir todos los exámenes de userId.
-  const exams = await prisma.exam.findMany({
-    where: {
-      userId,
-    },
-  })
-
-  // Respuesta satisfactoria.
-  const successResponse: ApiResponse<Exam[]> = {
-    success: true,
-    data: exams,
-    message: "Se han obtenido correctamente los exámenes.",
-  }
-
-  return new Response(JSON.stringify(successResponse), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  })
+interface ChatRequest {
+  grade: string
+  subject: string
+  topics: string[]
 }
 
-export async function POST(request: Request) {
-  // Parse the request body
+export async function POST(request: Request): Promise<Response> {
   const body = await request.json()
-  const { name } = body
+  const { grade, subject, topics }: ChatRequest = body
 
-  // e.g. Insert new user into your DB
-  const newUser = { id: Date.now(), name }
+  const client = new OpenAI({ apiKey: process.env.OPEN_AI_KEY })
 
-  return new Response(JSON.stringify(newUser), {
+  const prompt = `
+    Genera un examen completo con la siguiente información:
+
+    - Curso: ${grade}
+    - Asignatura: ${subject}
+    - Temas: ${topics.join(", ")}
+
+    Requisitos:
+    1. Mezcla de preguntas: opción múltiple, verdadero/falso, respuesta corta y ensayo.
+    2. Incluye respuestas correctas.
+    3. Formato claro con numeración y secciones.
+    4. Contenido relevante a los temas.
+    5. Adecuado al nivel del curso.
+    6. Texto plano, sin Markdown ni bloques de código.
+
+    Opcional: incluye una breve introducción o instrucciones al inicio del examen.
+    `.trim()
+
+  // Llamada simplificada para gpt-4o-mini
+  const response = await client.responses.create({
+    model: "gpt-4o-mini",
+    input: prompt,
+  })
+
+  // response.output_text contiene el texto generado
+  console.log(response.output_text)
+
+  return new Response(JSON.stringify({ examen: response.output_text }), {
     status: 201,
     headers: { "Content-Type": "application/json" },
   })
