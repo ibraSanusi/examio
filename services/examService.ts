@@ -9,8 +9,8 @@ export const examService = {
     })
   },
 
-  async deleteExamById(examId: string): Promise<void> {
-    await prisma.exam.delete({
+  async deleteExamById(examId: string): Promise<Exam | null> {
+    return prisma.exam.delete({
       where: { id_examen: examId },
     })
   },
