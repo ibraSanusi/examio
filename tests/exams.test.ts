@@ -1,8 +1,18 @@
 // tests/exams.test.ts
-import { GET } from "@/app/api/exams/by-exam-id/[examId]/route"
+import { GET, DELETE } from "@/app/api/exams/by-exam-id/[examId]/route"
+
+import { Exam, User } from "@/types/models"
+
 import { prisma } from "@/lib"
 import { examService } from "@/services/examService"
+import { ApiResponseError, ApiResponseSuccess } from "@/types/api"
 import { NextRequest } from "next/server"
+import {
+  createUserExam,
+  createUserTest,
+  deletePreviousExamCreated,
+  deletePreviousUserCreated,
+} from "./helpers/services"
 
 describe("GET /exams/[examId]", () => {
   it("should return 404 if exam does not exist", async () => {
@@ -21,23 +31,11 @@ describe("GET /exams/[examId]", () => {
   })
 
   it("should return 200 status and exam if it exists", async () => {
-    const user = await prisma.user.create({
-      data: {
-        email: "ibra@test.test",
-        username: "sanuzi",
-        name: "Ibrahim Ayodeji Sanusi Test",
-        age: "9",
-      },
-    })
+    const user = await createUserTest(prisma)
 
     expect(user).not.toBeNull()
 
-    const exam = await prisma.exam.create({
-      data: {
-        userId: user.id,
-        chat_examen: "Este es un examen creado para testing.",
-      },
-    })
+    const exam = await createUserExam(user.id, prisma)
 
     expect(exam).not.toBeNull()
 
@@ -54,10 +52,50 @@ describe("GET /exams/[examId]", () => {
         createdAt: new Date(json.data.createdAt),
       }).toEqual(exam)
     } finally {
-      await prisma.exam.delete({ where: { id_examen: exam.id_examen } })
-      await prisma.user.delete({ where: { id: user.id } })
-
-      await prisma.$disconnect()
+      await deletePreviousExamCreated(exam, prisma)
+      await deletePreviousUserCreated(user, prisma)
     }
+  })
+})
+
+describe("DELETE /exams/[examId]", () => {
+  it("should return 404 if exam does not exist", async () => {
+    const mock = jest.spyOn(examService, "deleteExamById").mockResolvedValue(null)
+
+    const params = { examId: "id_no_existe" }
+    const response = await DELETE({} as NextRequest, { params })
+
+    const json: ApiResponseError = await response.json()
+
+    expect(response.status).toBe(404)
+    expect(json.success).toBe(false)
+    expect(json.error.code).toBe("EXAM_NOT_FOUND")
+
+    mock.mockRestore()
+  })
+
+  it("should return 200 and exam_id if could delete it", async () => {
+    const user: User = await createUserTest(prisma)
+
+    try {
+      const exam: Exam = await createUserExam(user.id, prisma)
+      const params = { examId: exam.id_examen }
+
+      const response = await DELETE({} as NextRequest, { params })
+      const json: ApiResponseSuccess<string> = await response.json()
+
+      expect(json.success).toBe(true)
+      expect(response.status).toBe(200)
+      expect(json.data).toBe(exam.id_examen)
+
+      const examInDb = await prisma.exam.findUnique({ where: { id_examen: exam.id_examen } })
+      expect(examInDb).toBeNull()
+    } finally {
+      await deletePreviousUserCreated(user, prisma)
+    }
+  })
+
+  afterAll(async () => {
+    await prisma.$disconnect()
   })
 })
