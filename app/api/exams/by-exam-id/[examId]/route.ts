@@ -1,4 +1,5 @@
-import { prisma } from "@/lib"
+import { examService } from "@/services/examService"
+
 import { ApiResponseError, ApiResponseSuccess } from "@/types/api"
 import { Exam } from "@/types/models"
 import { NextRequest, NextResponse } from "next/server"
@@ -13,9 +14,7 @@ export async function GET(request: NextRequest, { params }: ParamsType): Promise
   try {
     const { examId } = await params
 
-    const exam = await prisma.exam.findUnique({
-      where: { id_examen: examId },
-    })
+    const exam = await examService.getExamById(examId)
 
     if (!exam) {
       const errorResponse: ApiResponseError = {
@@ -63,11 +62,7 @@ export async function DELETE(request: NextRequest, { params }: ParamsType) {
   }
 
   try {
-    await prisma.exam.delete({
-      where: {
-        id_examen: examId,
-      },
-    })
+    await examService.deleteExamById(examId)
 
     const successResponse: ApiResponseSuccess<null> = {
       success: true,

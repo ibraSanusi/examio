@@ -1,4 +1,4 @@
-import { prisma } from "@/lib"
+import { examService } from "@/services/examService"
 import { ApiResponse, ApiResponseError } from "@/types/api"
 import { Exam } from "@/types/models"
 import { NextRequest, NextResponse } from "next/server"
@@ -22,7 +22,7 @@ export async function GET(
     )
   }
 
-  const exams = await prisma.exam.findMany({ where: { userId } })
+  const exams = await examService.getExamsByUserId(userId)
 
   if (!exams.length) {
     return NextResponse.json<ApiResponse<Exam[]>>(
