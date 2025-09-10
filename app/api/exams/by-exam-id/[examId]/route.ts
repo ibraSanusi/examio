@@ -62,12 +62,25 @@ export async function DELETE(request: NextRequest, { params }: ParamsType) {
   }
 
   try {
-    await examService.deleteExamById(examId)
+    const deleted = await examService.deleteExamById(examId)
 
-    const successResponse: ApiResponseSuccess<null> = {
+    if (!deleted) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: {
+            code: "EXAM_NOT_FOUND",
+            message: "No se pudo eliminar el examen. Puede que no exista.",
+          },
+        },
+        { status: 404 },
+      )
+    }
+
+    const successResponse: ApiResponseSuccess<string> = {
       success: true,
       message: "Examen eliminado correctamente.",
-      data: null,
+      data: deleted.id_examen,
     }
 
     return NextResponse.json(successResponse, { status: 200 })
@@ -75,11 +88,8 @@ export async function DELETE(request: NextRequest, { params }: ParamsType) {
     console.log(error)
     const errorResponse: ApiResponseError = {
       success: false,
-      error: {
-        code: "EXAM_NOT_FOUND",
-        message: "No se pudo eliminar el examen. Puede que no exista.",
-      },
+      error: { code: "INTERNAL_ERROR", message: "Error interno del servidor." },
     }
-    return NextResponse.json(errorResponse, { status: 404 })
+    return NextResponse.json(errorResponse, { status: 500 })
   }
 }
