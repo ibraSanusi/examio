@@ -34,7 +34,8 @@
         "next": "15.5.2",
         "next-auth": "^4.24.11",
         "openai": "^5.19.1",
-        "tsx": "^4.20.5"
+        "tsx": "^4.20.5",
+        "zod": "^4.1.7"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",
