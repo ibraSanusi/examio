@@ -14,6 +14,17 @@ export async function GET(request: NextRequest, { params }: ParamsType): Promise
   try {
     const { examId } = await params
 
+    if (!examId) {
+      const errorResponse: ApiResponseError = {
+        success: false,
+        error: {
+          code: "EXAM_ID_REQUIRED",
+          message: "Se requiere el ID del examen",
+        },
+      }
+      return NextResponse.json(errorResponse, { status: 400 })
+    }
+
     const exam = await examService.getExamById(examId)
 
     if (!exam) {

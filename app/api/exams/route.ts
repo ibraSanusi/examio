@@ -1,45 +1,44 @@
-import OpenAI from "openai"
+import { generatePrompt } from "@/lib/helpers"
+import { gptService } from "@/services/gptService"
+import { ApiResponseError } from "@/types/api"
+import { NextRequest, NextResponse } from "next/server"
+import z from "zod"
 
-interface ChatRequest {
-  grade: string
-  subject: string
-  topics: string[]
-}
+const ChatRequestSchema = z.object({
+  grade: z.string(),
+  subject: z.string(),
+  topics: z.string().array(),
+})
 
-export async function POST(request: Request): Promise<Response> {
+export async function POST(request: NextRequest): Promise<Response> {
   const body = await request.json()
-  const { grade, subject, topics }: ChatRequest = body
+  const bodyParsed = ChatRequestSchema.safeParse(body)
 
-  const client = new OpenAI({ apiKey: process.env.OPEN_AI_KEY })
+  if (!bodyParsed.success) {
+    const errorResponse: ApiResponseError = {
+      success: false,
+      error: {
+        code: "DATA_NOT_VALID",
+        message: "Los datos enviados no son válidos.",
+      },
+    }
 
-  const prompt = `
-    Genera un examen completo con la siguiente información:
+    return NextResponse.json(errorResponse, { status: 400 })
+  }
 
-    - Curso: ${grade}
-    - Asignatura: ${subject}
-    - Temas: ${topics.join(", ")}
+  const { grade, subject, topics } = bodyParsed.data
 
-    Requisitos:
-    1. Mezcla de preguntas: opción múltiple, verdadero/falso, respuesta corta y ensayo.
-    2. Incluye respuestas correctas.
-    3. Formato claro con numeración y secciones.
-    4. Contenido relevante a los temas.
-    5. Adecuado al nivel del curso.
-    6. Texto plano, sin Markdown ni bloques de código.
+  const prompt = generatePrompt({ grade, subject, topics })
 
-    Opcional: incluye una breve introducción o instrucciones al inicio del examen.
-    `.trim()
+  const output_text = await gptService.ask(prompt)
 
-  // Llamada simplificada para gpt-4o-mini
-  const response = await client.responses.create({
-    model: "gpt-4o-mini",
-    input: prompt,
-  })
+  if (!output_text) {
+    return new Response(null, { status: 204 })
+  }
 
-  // response.output_text contiene el texto generado
-  console.log(response.output_text)
+  console.log(output_text)
 
-  return new Response(JSON.stringify({ examen: response.output_text }), {
+  return new Response(JSON.stringify({ examen: output_text }), {
     status: 201,
     headers: { "Content-Type": "application/json" },
   })
