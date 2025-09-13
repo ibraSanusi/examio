@@ -1,4 +1,4 @@
-import { generatePrompt } from "@/lib/helpers"
+import { generatePrompt } from "@/lib/api"
 import { gptService } from "@/services/gptService"
 import { ApiResponseError } from "@/types/api"
 import { NextRequest, NextResponse } from "next/server"

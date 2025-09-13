@@ -1,16 +1,13 @@
 import { examService } from "@/services/examService"
 
-import { ApiResponseError, ApiResponseSuccess } from "@/types/api"
+import { ApiResponseError, ApiResponseSuccess, ByExamIdParamsType } from "@/types/api"
 import { Exam } from "@/types/models"
 import { NextRequest, NextResponse } from "next/server"
 
-type ParamsType = {
-  params: {
-    examId: string
-  }
-}
-
-export async function GET(request: NextRequest, { params }: ParamsType): Promise<NextResponse> {
+export async function GET(
+  request: NextRequest,
+  { params }: ByExamIdParamsType,
+): Promise<NextResponse> {
   try {
     const { examId } = await params
 
@@ -58,7 +55,7 @@ export async function GET(request: NextRequest, { params }: ParamsType): Promise
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: ParamsType) {
+export async function DELETE(request: NextRequest, { params }: ByExamIdParamsType) {
   const { examId } = await params
 
   if (!examId) {

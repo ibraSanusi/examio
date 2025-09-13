@@ -15,3 +15,9 @@ export type ApiResponseError = {
 }
 
 export type ApiResponse<T> = ApiResponseSuccess<T> | ApiResponseError
+
+export type ByExamIdParamsType = {
+  params: {
+    examId: string
+  }
+}
