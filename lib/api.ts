@@ -28,6 +28,30 @@ export function generatePrompt({
     `.trim()
 }
 
+export function getCorrectionPrompt(examQuestions: string, answers: string[]): string {
+  return `
+        Corrige el siguiente examen de primaria:
+
+        Examen:
+        ${examQuestions}
+
+        Respuestas del alumno:
+        ${answers.map((a, i) => `${i + 1}. ${a}`).join("\n")}
+
+        Requisitos:
+        1. Evalúa cada respuesta y determina si es correcta o incorrecta comparando estrictamente con la respuesta correcta.
+        2. Asigna 1 punto por respuesta correcta y 0 por incorrecta.
+        3. Devuelve la corrección numerada por pregunta, indicando la respuesta del alumno y la respuesta correcta.
+        4. No incluyas explicaciones, comentarios ni justificaciones.
+        5. El alumno no necesita justificar nada.
+        6. Las preguntas pueden ser de cualquier curso o asignatura de primaria: matemáticas, lengua, ciencias, historia, geografía, etc.
+
+        IMPORTANTE: Compara siempre la respuesta del alumno con la respuesta correcta de forma estricta y lógica. Marca Correcta solo si coincide exactamente.
+
+        Solo responde con la corrección y el puntaje total en texto plano.
+  `.trim()
+}
+
 export function generateErrorResponse(code: string, message: string): ApiResponseError {
   return {
     success: false,
