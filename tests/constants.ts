@@ -1,3 +1,5 @@
+import { Exam } from "@/types/models"
+
 export const bodyValid = {
   grade: "4 de primaria",
   subject: "matemáticas",
@@ -18,4 +20,11 @@ export const bodyNotValid = {
   grade: 2,
   subject: 5,
   topics: {},
+}
+
+export const examResponse: Exam | null = {
+  id_examen: "exam_id1234",
+  chat_examen: "Examen cualquiera",
+  createdAt: new Date(),
+  userId: "pepito_id_39424",
 }
