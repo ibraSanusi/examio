@@ -1,6 +1,6 @@
 import { generateErrorResponse, generateSuccessResponse, getCorrectionPrompt } from "@/lib/api"
-import { examService } from "@/services/examService"
-import { gptService } from "@/services/gptService"
+import { examService } from "@/services/api/examService"
+import { gptService } from "@/services/api/gptService"
 import { ApiResponseError, ApiResponseSuccess, ByExamIdParamsType } from "@/types/api"
 import { NextRequest, NextResponse } from "next/server"
 import z from "zod"
