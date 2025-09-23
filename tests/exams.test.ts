@@ -2,7 +2,7 @@
 import { GET, DELETE } from "@/app/api/exams/by-exam-id/[examId]/route"
 import { Exam, User } from "@/types/models"
 import { prisma } from "@/lib"
-import { examService } from "@/services/examService"
+import { examService } from "@/services/api/examService"
 import { ApiResponseError, ApiResponseSuccess } from "@/types/api"
 import { NextRequest } from "next/server"
 import {
@@ -13,7 +13,7 @@ import {
 } from "./helpers/services"
 import { POST as POST_EXAMS } from "@/app/api/exams/route"
 import { POST as POST_CHECK } from "@/app/api/exams/by-exam-id/[examId]/check/route"
-import { gptService } from "@/services/gptService"
+import { gptService } from "@/services/api/gptService"
 import { bodyNotValid, bodyValid, examResponse } from "./constants"
 
 describe("GET /exams/by-exam-id/[examId]", () => {
@@ -221,7 +221,7 @@ describe("POST /exams/by-exam-id/[examId]/check", () => {
     getExamByIdMock.mockRestore()
   })
 
-  it("should return 200 if exam was graded", async () => {
+  it("should return 200 if the exam was graded", async () => {
     const getExamByIdMock = jest.spyOn(examService, "getExamById").mockResolvedValue(examResponse)
     const gptServiceAskMock = jest
       .spyOn(gptService, "ask")
