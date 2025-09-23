@@ -28,10 +28,8 @@ export async function createExam(previousState: ExamState, formData: FormData): 
   console.log("Esperando la respuesta de gpt...")
   const output_text = await gptService.ask(prompt)
 
-  //   ExamCache.saveText("exam", output_text)
   const cookieStore = await cookies()
   cookieStore.set("exam", output_text, { httpOnly: true, expires: 60 * 60 })
 
-  console.log("Redirigiendo...")
   redirect("/exam")
 }
