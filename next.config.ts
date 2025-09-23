@@ -1,6 +1,8 @@
 import type { NextConfig } from "next"
+import createMDX from "@next/mdx"
 
 const nextConfig: NextConfig = {
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   // Habilita imágenes optimizadas de dominios externos
   images: {
     domains: ["images.unsplash.com", "avatars.githubusercontent.com"],
@@ -11,7 +13,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/login",
-        destination: "/pages/auth/login", // elimina "pages" de la ruta, Next.js lo maneja automáticamente
+        destination: "/pages/auth/login",
+      },
+      {
+        source: "/exam",
+        destination: "/pages/exam",
       },
     ]
   },
@@ -20,4 +26,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
 }
 
-export default nextConfig
+const withMDX = createMDX({
+  // Add markdown plugins here, as desired
+})
+
+// Merge MDX config with Next.js config
+export default withMDX(nextConfig)

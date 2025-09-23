@@ -22,7 +22,7 @@ export function generatePrompt({
     3. Formato claro con numeración y secciones.
     4. Contenido relevante a los temas.
     5. Adecuado al nivel del curso.
-    6. Texto plano, sin Markdown ni bloques de código.
+    6. **Devolver en formato Markdown, sin usar bloques de código.**
 
     Opcional: incluye una breve introducción o instrucciones al inicio del examen.
     `.trim()

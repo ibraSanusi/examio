@@ -85,6 +85,7 @@ model Exam {
   id_examen   String   @id @default(cuid()) // cuid() genera un string único
   chat_examen String
   createdAt   DateTime @default(now())
+//   score       Float
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String

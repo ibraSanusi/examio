@@ -1,6 +1,6 @@
-import { generatePrompt } from "@/lib/api"
-import { gptService } from "@/services/gptService"
-import { ApiResponseError } from "@/types/api"
+import { generateErrorResponse, generatePrompt, generateSuccessResponse } from "@/lib/api"
+import { gptService } from "@/services/api/gptService"
+import { ApiResponseError, ApiResponseSuccess } from "@/types/api"
 import { NextRequest, NextResponse } from "next/server"
 import z from "zod"
 
@@ -15,13 +15,10 @@ export async function POST(request: NextRequest): Promise<Response> {
   const bodyParsed = ChatRequestSchema.safeParse(body)
 
   if (!bodyParsed.success) {
-    const errorResponse: ApiResponseError = {
-      success: false,
-      error: {
-        code: "DATA_NOT_VALID",
-        message: "Los datos enviados no son válidos.",
-      },
-    }
+    const errorResponse: ApiResponseError = generateErrorResponse(
+      "DATA_NOT_VALID",
+      "Los datos enviados no son válidos.",
+    )
 
     return NextResponse.json(errorResponse, { status: 400 })
   }
@@ -33,13 +30,18 @@ export async function POST(request: NextRequest): Promise<Response> {
   const output_text = await gptService.ask(prompt)
 
   if (!output_text) {
-    return new Response(null, { status: 204 })
+    const errorResponse: ApiResponseError = generateErrorResponse(
+      "NO_EXAM_GENERATED",
+      "El examen no se pudo generar.",
+    )
+    return NextResponse.json(errorResponse, { status: 204 })
   }
 
   console.log(output_text)
+  const successResponse: ApiResponseSuccess<string> = generateSuccessResponse<string>(
+    output_text,
+    "Examen generado correctamente.",
+  )
 
-  return new Response(JSON.stringify({ examen: output_text }), {
-    status: 201,
-    headers: { "Content-Type": "application/json" },
-  })
+  return NextResponse.json(successResponse, { status: 201 })
 }

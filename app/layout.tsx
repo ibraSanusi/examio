@@ -2,10 +2,16 @@ import type { Metadata } from "next"
 import "./globals.css"
 import { ReactNode } from "react"
 import Providers from "./providers"
+import Noise from "@/components/ui/noise"
+
+import { baloo_2 } from "@/lib/fonts"
+import NavBarItem from "@/components/ui/nav-bar-item"
+import NavBar from "@/components/ui/nav-bar"
+import Header from "@/components/ui/header"
 
 export const metadata: Metadata = {
-  title: "Mi App Next.js",
-  description: "Template básico con App Router",
+  title: "examio",
+  description: "App desarrollada para que los chavales practiquen antes del examen",
 }
 
 export default function RootLayout({
@@ -14,19 +20,22 @@ export default function RootLayout({
   children: ReactNode
 }>) {
   return (
-    <html lang="es">
-      <body suppressHydrationWarning>
-        <header>
-          <nav>
-            <h1>Mi App</h1>
-          </nav>
-        </header>
-        <main>
-          <Providers>{children}</Providers>
-        </main>
-        <footer>
-          <p>© {new Date().getFullYear()} Mi App</p>
-        </footer>
+    <html className={`${baloo_2.className} h-full`} lang="es">
+      <body className="relative min-h-screen w-full" suppressHydrationWarning>
+        <Noise />
+        <section className="m-auto w-full max-w-7xl space-y-8 p-8">
+          <Header />
+
+          <main>
+            <Providers>{children}</Providers>
+          </main>
+
+          <NavBar>
+            <NavBarItem>Home</NavBarItem>
+            <NavBarItem>Exam</NavBarItem>
+            <NavBarItem>Settings</NavBarItem>
+          </NavBar>
+        </section>
       </body>
     </html>
   )

@@ -1,0 +1,86 @@
+{
+    "grades": [
+        {
+            "name": "1º Primaria",
+            "subjects": [
+                {
+                    "name": "Matemáticas",
+                    "topics": [
+                        "Números hasta el 100",
+                        "Sumas y restas básicas",
+                        "Figuras geométricas simples",
+                        "Medidas de longitud y peso"
+                    ]
+                },
+                {
+                    "name": "Lengua",
+                    "topics": [
+                        "El abecedario",
+                        "Formación de palabras",
+                        "Comprensión lectora básica",
+                        "Uso de mayúsculas y puntos"
+                    ]
+                },
+                {
+                    "name": "Ciencias Naturales",
+                    "topics": [
+                        "Los sentidos",
+                        "Animales y plantas",
+                        "El cuerpo humano",
+                        "El agua y su importancia"
+                    ]
+                },
+                {
+                    "name": "Inglés",
+                    "topics": [
+                        "Saludos básicos",
+                        "Colores y números",
+                        "Animales en inglés",
+                        "Objetos del aula"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "2º Primaria",
+            "subjects": [
+                {
+                    "name": "Matemáticas",
+                    "topics": [
+                        "Números hasta el 1000",
+                        "Sumas y restas con llevadas",
+                        "Introducción a la multiplicación",
+                        "Figuras planas y cuerpos geométricos"
+                    ]
+                },
+                {
+                    "name": "Lengua",
+                    "topics": [
+                        "Sustantivos y adjetivos",
+                        "Uso de comas y signos de interrogación",
+                        "Comprensión de cuentos",
+                        "Escritura de frases"
+                    ]
+                },
+                {
+                    "name": "Ciencias Naturales",
+                    "topics": [
+                        "La familia y la escuela",
+                        "El ciclo del agua",
+                        "Partes de la planta",
+                        "El día y la noche"
+                    ]
+                },
+                {
+                    "name": "Inglés",
+                    "topics": [
+                        "Mi familia",
+                        "Partes del cuerpo",
+                        "Ropa",
+                        "Comidas y bebidas"
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -3,6 +3,7 @@ export type Exam = {
   createdAt: Date
   id_examen: string
   chat_examen: string
+  score?: number
 }
 
 export type User = {
