@@ -1,4 +1,4 @@
-import { examService } from "@/services/examService"
+import { examService } from "@/services/api/examService"
 
 import { ApiResponseError, ApiResponseSuccess, ByExamIdParamsType } from "@/types/api"
 import { Exam } from "@/types/models"
