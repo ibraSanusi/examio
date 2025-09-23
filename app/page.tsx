@@ -6,7 +6,6 @@ import {
   AccordionTrigger,
 } from "@radix-ui/react-accordion"
 import data from "@/app/assets/data.json"
-
 import GradeForm from "@/components/GradeForm"
 
 export default function HomePage() {
