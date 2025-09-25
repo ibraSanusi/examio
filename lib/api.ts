@@ -10,21 +10,47 @@ export function generatePrompt({
   topics: string[]
 }) {
   return `
-    Genera un examen completo con la siguiente información:
+Genera un examen completo con la siguiente información:
 
-    - Curso: ${grade}
-    - Asignatura: ${subject}
-    - Temas: ${topics.join(", ")}
+- Curso: ${grade}
+- Asignatura: ${subject}
+- Temas: ${topics.join(", ")}
 
-    Requisitos:
-    1. Mezcla de preguntas: opción múltiple, verdadero/falso, respuesta corta y ensayo.
-    2. Incluye respuestas correctas.
-    3. Formato claro con numeración y secciones.
-    4. Contenido relevante a los temas.
-    5. Adecuado al nivel del curso.
-    6. **Devolver en formato Markdown, sin usar bloques de código.**
+### Requisitos de Formato (IMPORTANTE)
+1. Usa **Markdown válido** (sin bloques de código).
+2. Estructura en secciones: opción múltiple, verdadero/falso, respuesta corta y ensayo.
+3. Marca las respuestas de la siguiente forma para que puedan transformarse en inputs HTML:
+   - **Opción múltiple**: lista con prefijos "- [ ]" para respuestas incorrectas y "- [x]" para la correcta (checkbox).
+   - **Verdadero/Falso**: usa "- ( )" para falso y "- (x)" para verdadero (radio).
+   - **Respuesta corta**: coloca un tag '<ShortAnswer />' donde el estudiante debe escribir (textarea).
+   - **Ensayo**: coloca un tag '<Essay />' donde el estudiante debe escribir un texto más largo (textarea grande).
+4. No incluyas explicación de las respuestas, solo márcalas con [x].
+5. Lenguaje claro y adaptado al nivel del curso.
 
-    Opcional: incluye una breve introducción o instrucciones al inicio del examen.
+### Ejemplo de formato esperado
+
+## Sección 1: Opción Múltiple
+1. ¿Cuál es el resultado de 8 + 5?
+- [ ] 12
+- [x] 13
+- [ ] 14
+- [ ] 15
+
+## Sección 2: Verdadero/Falso
+2. 7 + 3 es igual a 10.
+- (x) Verdadero
+- ( ) Falso
+
+## Sección 3: Respuesta Corta
+3. Realiza la siguiente suma: 23 + 17 =
+<ShortAnswer />
+
+## Sección 4: Ensayo
+4. Explica cómo resolver una resta.
+<Essay />
+
+---
+Genera el examen siguiendo exactamente este formato.
     `.trim()
 }
 

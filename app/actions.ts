@@ -33,3 +33,12 @@ export async function createExam(previousState: ExamState, formData: FormData): 
 
   redirect("/exam")
 }
+
+export async function checkExam(formData: FormData) {
+  const entries = formData.entries()
+
+  for (const [key, value] of entries) {
+    console.log(key, value)
+  }
+  console.log("Eurekaaaa :)")
+}
