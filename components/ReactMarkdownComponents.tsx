@@ -8,7 +8,6 @@ export const components: Components = {
 
     // Caso: checkbox
     if (raw.startsWith("[object Object]") || raw.startsWith("[x]")) {
-      const checked = raw.startsWith("[x]")
       const label = raw
         .replace(/\[object Object\],?\s*/g, "")
         .replace(/^,?\s*/, "")
@@ -16,7 +15,7 @@ export const components: Components = {
       return (
         <li className="w-fit list-none">
           <label className="flex items-center gap-2">
-            <input name="check_por_ejemplo" type="checkbox" defaultChecked={checked} />
+            <input id={`${label}-id`} name={label} type="checkbox" />
             {label}
           </label>
         </li>
@@ -25,12 +24,11 @@ export const components: Components = {
 
     // Caso: radio
     if (raw.startsWith("( )") || raw.startsWith("(x)")) {
-      const checked = raw.startsWith("(x)")
       const label = raw.replace("( )", "").replace("(x)", "").trim()
       return (
         <li className="w-fit list-none">
           <label className="flex items-center gap-2">
-            <input type="radio" name="radio-group" defaultChecked={checked} />
+            <input type="radio" name="radio-group" />
             {label}
           </label>
         </li>
@@ -45,7 +43,7 @@ export const components: Components = {
         <li className="w-fit">
           <p>{sentence}</p>
           <textarea
-            name="textarea"
+            name={sentence.replaceAll(" ", "-")}
             rows={2}
             className="w-full rounded border p-2"
             placeholder="Redacta tu respuesta aquí..."
@@ -62,7 +60,7 @@ export const components: Components = {
         <li className="w-fit">
           <p>{sentence}</p>
           <textarea
-            name="textarea2"
+            name={sentence.replaceAll(" ", "-")}
             rows={6}
             className="w-full rounded border p-2"
             placeholder="Redacta tu respuesta aquí..."
