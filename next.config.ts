@@ -6,12 +6,15 @@ const nextConfig: NextConfig = {
     domains: ["images.unsplash.com", "avatars.githubusercontent.com"],
   },
 
-  // Configuración de rewrites (rutas personalizadas)
   async rewrites() {
     return [
       {
         source: "/login",
-        destination: "/pages/auth/login", // elimina "pages" de la ruta, Next.js lo maneja automáticamente
+        destination: "/pages/auth/login",
+      },
+      {
+        source: "/exam",
+        destination: "/pages/exam",
       },
     ]
   },

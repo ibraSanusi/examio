@@ -1,26 +1,47 @@
-export async function GET(request: Request) {
-  console.log(request)
-  // For example, fetch data from your DB here
-  const users = [
-    { id: 1, name: "Alice" },
-    { id: 2, name: "Bob" },
-  ]
-  return new Response(JSON.stringify(users), {
-    status: 200,
-    headers: { "Content-Type": "application/json" },
-  })
-}
+import { generateErrorResponse, generatePrompt, generateSuccessResponse } from "@/lib/api"
+import { gptService } from "@/services/api/gptService"
+import { ApiResponseError, ApiResponseSuccess } from "@/types/api"
+import { NextRequest, NextResponse } from "next/server"
+import z from "zod"
 
-export async function POST(request: Request) {
-  // Parse the request body
+const ChatRequestSchema = z.object({
+  grade: z.string(),
+  subject: z.string(),
+  topics: z.string().array(),
+})
+
+export async function POST(request: NextRequest): Promise<Response> {
   const body = await request.json()
-  const { name } = body
+  const bodyParsed = ChatRequestSchema.safeParse(body)
 
-  // e.g. Insert new user into your DB
-  const newUser = { id: Date.now(), name }
+  if (!bodyParsed.success) {
+    const errorResponse: ApiResponseError = generateErrorResponse(
+      "DATA_NOT_VALID",
+      "Los datos enviados no son válidos.",
+    )
 
-  return new Response(JSON.stringify(newUser), {
-    status: 201,
-    headers: { "Content-Type": "application/json" },
-  })
+    return NextResponse.json(errorResponse, { status: 400 })
+  }
+
+  const { grade, subject, topics } = bodyParsed.data
+
+  const prompt = generatePrompt({ grade, subject, topics })
+
+  const output_text = await gptService.ask(prompt)
+
+  if (!output_text) {
+    const errorResponse: ApiResponseError = generateErrorResponse(
+      "NO_EXAM_GENERATED",
+      "El examen no se pudo generar.",
+    )
+    return NextResponse.json(errorResponse, { status: 204 })
+  }
+
+  console.log(output_text)
+  const successResponse: ApiResponseSuccess<string> = generateSuccessResponse<string>(
+    output_text,
+    "Examen generado correctamente.",
+  )
+
+  return NextResponse.json(successResponse, { status: 201 })
 }

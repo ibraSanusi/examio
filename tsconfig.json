@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".prisma/client",
-    "eslint.config.mjs"
+    "eslint.config.mjs",
+    "app/pages/mdx-page/page.mdx"
   ],
   "exclude": ["node_modules", "prisma/seed.ts"]
 }

@@ -38,7 +38,8 @@ async function main() {
   // 📝 Crear examen
   await prisma.exam.create({
     data: {
-      chat_examen: "Primer examen de matemáticas",
+      chat_examen:
+        "1. Si tienes 7 manzanas y compras 5 más, ¿cuántas manzanas tienes en total? 2. ¿Cuánto es 8 × 6?",
       userId: user.id,
     },
   })
