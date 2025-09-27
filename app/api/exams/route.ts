@@ -29,13 +29,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   const output_text = await gptService.ask(prompt)
 
-  if (!output_text) {
-    const errorResponse: ApiResponseError = generateErrorResponse(
-      "NO_EXAM_GENERATED",
-      "El examen no se pudo generar.",
-    )
-    return NextResponse.json(errorResponse, { status: 204 })
-  }
+  if (!output_text) return new Response(null, { status: 204 })
 
   console.log(output_text)
   const successResponse: ApiResponseSuccess<string> = generateSuccessResponse<string>(
