@@ -43,7 +43,7 @@ describe("GET /exams/by-exam-id/[examId]", () => {
     expect(json.error.code).toBe("EXAM_ID_REQUIRED")
   })
 
-  it.skip("should return 200 status and exam if it exists", async () => {
+  it("should return 200 status and exam if it exists", async () => {
     const user = await createUserTest(prisma)
 
     expect(user).not.toBeNull()
