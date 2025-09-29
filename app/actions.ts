@@ -1,6 +1,6 @@
 "use server"
 
-import { generatePrompt } from "@/lib/api"
+import { generatePrompt, getCorrectionPrompt } from "@/lib/api"
 import { gptService } from "@/services/api/gptService"
 import { ExamState } from "@/types/exam"
 import { redirect } from "next/navigation"
@@ -34,11 +34,32 @@ export async function createExam(previousState: ExamState, formData: FormData): 
   redirect("/exam")
 }
 
-export async function checkExam(formData: FormData) {
+export async function getScore(formData: FormData, examContent: string) {
   const entries = formData.entries()
 
+  console.log(entries)
+  const answers = []
+
   for (const [key, value] of entries) {
-    console.log(key, value)
+    if (key.includes("ACTION_ID")) continue
+
+    const answer = {
+      [key]: value,
+    }
+    answers.push(answer)
   }
-  console.log("Eurekaaaa :)")
+
+  console.log(answers)
+  console.log(examContent)
+
+  const prompt = getCorrectionPrompt(examContent, answers)
+
+  // Comprobar corrección con gpt
+  const score = await gptService.ask(prompt)
+
+  console.log(score)
+
+  return score
+
+  // TODO: guardar la nota del examen.
 }

@@ -1,4 +1,6 @@
 import { ApiResponseError, ApiResponseSuccess } from "@/types/api"
+import { examService } from "@/services/api/examService"
+import { gptService } from "@/services/api/gptService"
 
 export function generatePrompt({
   grade,
@@ -19,42 +21,46 @@ Genera un examen completo con la siguiente información:
 ### Requisitos de Formato (IMPORTANTE)
 1. Usa **Markdown válido** (sin bloques de código).
 2. Estructura en secciones: opción múltiple, verdadero/falso, respuesta corta y ensayo.
-3. Marca las respuestas de la siguiente forma para que puedan transformarse en inputs HTML:
-   - **Opción múltiple**: lista con prefijos "- [ ]" para respuestas incorrectas y "- [x]" para la correcta (checkbox).
-   - **Verdadero/Falso**: usa "- ( )" para falso y "- (x)" para verdadero (radio).
-   - **Respuesta corta**: coloca un tag '<ShortAnswer />' donde el estudiante debe escribir (textarea).
-   - **Ensayo**: coloca un tag '<Essay />' donde el estudiante debe escribir un texto más largo (textarea grande).
-4. No incluyas explicación de las respuestas, solo márcalas con [x].
-5. Lenguaje claro y adaptado al nivel del curso.
+3. Usa los siguientes componentes (cada pregunta debe tener un \`id\` único en kebab-case o snake_case):
+   - **Opción múltiple**: \`<MultipleChoice id="pregunta-1" options={[{ "label": "X" }, ...]} />\`
+   - **Verdadero/Falso**: \`<TrueFalse id="pregunta-2" />\`
+   - **Respuesta corta**: \`<ShortAnswer id="pregunta-3" />\`
+   - **Ensayo**: \`<Essay id="pregunta-4" />\`
+4. El prop \`id\` servirá para agrupar inputs (radio/checkbox) y diferenciar las respuestas de cada pregunta.
+5. No incluyas explicaciones, solo marca las respuestas correctas con \`correct: true\`.
+6. Lenguaje claro y adaptado al nivel del curso.
 
-### Ejemplo de formato esperado
+### Ejemplo
 
 ## Sección 1: Opción Múltiple
 1. ¿Cuál es el resultado de 8 + 5?
-- [ ] 12
-- [x] 13
-- [ ] 14
-- [ ] 15
+<MultipleChoice id="pregunta-1" options={[{"label":"12"},{"label":"13"},{"label":"14"},{"label":"15"}]} />
 
 ## Sección 2: Verdadero/Falso
 2. 7 + 3 es igual a 10.
-- (x) Verdadero
-- ( ) Falso
+<TrueFalse id="pregunta-2" answer="true" />
 
 ## Sección 3: Respuesta Corta
 3. Realiza la siguiente suma: 23 + 17 =
-<ShortAnswer />
+<ShortAnswer id="pregunta-3" />
 
 ## Sección 4: Ensayo
 4. Explica cómo resolver una resta.
-<Essay />
+<Essay id="pregunta-4" />
 
 ---
 Genera el examen siguiendo exactamente este formato.
-    `.trim()
+  `.trim()
 }
 
-export function getCorrectionPrompt(examQuestions: string, answers: string[]): string {
+type CorrectionAnswerType = {
+  [key: string]: string
+}
+
+export function getCorrectionPrompt(
+  examQuestions: string,
+  answers: CorrectionAnswerType[],
+): string {
   return `
         Corrige el siguiente examen de primaria:
 
@@ -62,7 +68,11 @@ export function getCorrectionPrompt(examQuestions: string, answers: string[]): s
         ${examQuestions}
 
         Respuestas del alumno:
-        ${answers.map((a, i) => `${i + 1}. ${a}`).join("\n")}
+        ${answers.map((answer) => {
+          return Object.entries(answer)
+            .map(([key, value]) => `${key}. ${value}`)
+            .join("\n")
+        })}
 
         Requisitos:
         1. Evalúa cada respuesta y determina si es correcta o incorrecta comparando estrictamente con la respuesta correcta.
@@ -94,4 +104,31 @@ export function generateSuccessResponse<T>(data: T, message?: string): ApiRespon
     data,
     ...(message ? { message } : {}),
   }
+}
+
+export async function checkExam(answers: CorrectionAnswerType[], examId: string) {
+  const exam = await examService.getExamById(examId)
+
+  if (!exam) {
+    const errorResponse: ApiResponseError = generateErrorResponse(
+      "EXAM_NOT_FOUND",
+      "No se encontró el exámen.",
+    )
+
+    return { errorResponse, status: 404 }
+  }
+
+  const prompt = getCorrectionPrompt(exam.chat_examen, answers)
+
+  // Comprobar corrección con gpt
+  const correction = await gptService.ask(prompt)
+
+  // TODO: guardar la nota del examen.
+
+  const successResponse: ApiResponseSuccess<string> = generateSuccessResponse(
+    correction,
+    "Se comprobo el resultado del examen correctamente.",
+  )
+
+  return { successResponse, status: 200 }
 }

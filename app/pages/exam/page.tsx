@@ -1,11 +1,20 @@
 import { cookies } from "next/headers"
-import { ShortAnswer, Essay } from "@/app/pages/exam/components/MdxComponents"
+import {
+  ShortAnswer,
+  Essay,
+  MultipleChoice,
+  TrueFalse,
+} from "@/app/pages/exam/components/MdxComponents"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
+import { getScore } from "@/app/actions"
+import { redirect } from "next/navigation"
 
 const components = {
   ShortAnswer,
   Essay,
+  MultipleChoice,
+  TrueFalse,
 }
 
 export default async function ExamPage() {
@@ -14,16 +23,32 @@ export default async function ExamPage() {
   const examContent = headerCookieExam?.value
 
   if (!examContent) {
-    return <p className="text-gray-500">Cargando examen...</p>
+    redirect("/")
   }
 
-  console.log("En ExamPage: ", examContent)
+  const checkExam = async (formData: FormData) => {
+    "use server"
+    const score = await getScore(formData, examContent)
+
+    const cookieStore = await cookies()
+    cookieStore.set("score", score, { httpOnly: true, expires: 60 * 60 })
+
+    redirect("/score")
+  }
 
   return (
-    <MDXRemote
-      source={examContent}
-      components={components}
-      options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-    />
+    <form action={checkExam}>
+      <MDXRemote
+        source={examContent}
+        components={components}
+        options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+      />
+      <button
+        className="bg-purple hover:bg-yellow rounded-lg p-2 font-semibold text-white"
+        type="submit"
+      >
+        Enviar
+      </button>
+    </form>
   )
 }
