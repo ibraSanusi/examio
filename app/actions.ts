@@ -28,8 +28,31 @@ export async function createExam(previousState: ExamState, formData: FormData): 
   console.log("Esperando la respuesta de gpt...")
   const output_text = await gptService.ask(prompt)
 
+  const maxAge: number = Date.now() + 86400000 // un día
+  console.log(maxAge)
+
   const cookieStore = await cookies()
-  cookieStore.set("exam", output_text, { httpOnly: true, expires: 60 * 60 })
+  cookieStore.set("exam", output_text, { httpOnly: true, maxAge })
+
+  // restar peticiones al usuario
+  const cookieExamsLeft = cookieStore.get("exams-requests-left")?.value
+  const parsedExamsRequestLeft: number = Number.parseInt(cookieExamsLeft || "3") - 1
+
+  const examsLeft: string = parsedExamsRequestLeft.toString()
+
+  if (parsedExamsRequestLeft > 0)
+    cookieStore.set("exams-requests-left", examsLeft, { httpOnly: true, maxAge })
+
+  if (parsedExamsRequestLeft < 1) {
+    return {
+      success: false,
+      error: {
+        code: "LIMIT_REACHED",
+        message:
+          "Has alcanzado el número máximo de intentos. Si quieres seguir haciendo exámenes tienes que iniciar sesión.",
+      },
+    }
+  }
 
   redirect("/exam")
 }
