@@ -5,6 +5,8 @@ import { gptService } from "@/services/api/gptService"
 import { ExamState } from "@/types/exam"
 import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
+import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies"
+import { decreaseExamsRequests } from "@/lib/rate-limit"
 
 export async function createExam(previousState: ExamState, formData: FormData): Promise<ExamState> {
   if (!formData) {
@@ -28,22 +30,17 @@ export async function createExam(previousState: ExamState, formData: FormData): 
   console.log("Esperando la respuesta de gpt...")
   const output_text = await gptService.ask(prompt)
 
-  const maxAge: number = Date.now() + 86400000 // un día
-  console.log(maxAge)
+  const cookieOptions: Partial<ResponseCookie> = {
+    httpOnly: true,
+    maxAge: Date.now() + 86400000, // un día
+  }
 
   const cookieStore = await cookies()
-  cookieStore.set("exam", output_text, { httpOnly: true, maxAge })
+  cookieStore.set("exam", output_text, cookieOptions)
 
-  // restar peticiones al usuario
-  const cookieExamsLeft = cookieStore.get("exams-requests-left")?.value
-  const parsedExamsRequestLeft: number = Number.parseInt(cookieExamsLeft || "3") - 1
+  const examsRequestLeft = await decreaseExamsRequests(cookieStore, cookieOptions)
 
-  const examsLeft: string = parsedExamsRequestLeft.toString()
-
-  if (parsedExamsRequestLeft > 0)
-    cookieStore.set("exams-requests-left", examsLeft, { httpOnly: true, maxAge })
-
-  if (parsedExamsRequestLeft < 1) {
+  if (examsRequestLeft < 1) {
     return {
       success: false,
       error: {
@@ -58,6 +55,7 @@ export async function createExam(previousState: ExamState, formData: FormData): 
 }
 
 export async function getScore(formData: FormData, examContent: string) {
+  // TODO: guardar el examen en la base de datos
   const entries = formData.entries()
 
   console.log(entries)
