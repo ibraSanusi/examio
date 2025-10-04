@@ -10,6 +10,7 @@ import { decreaseExamsRequests } from "@/lib/rate-limit"
 import { getServerSession } from "next-auth"
 import { examService } from "@/services/api/examService"
 import { authOptions } from "@/lib"
+import { userService } from "@/services/api/userService"
 
 export async function createExam(previousState: ExamState, formData: FormData): Promise<ExamState> {
   if (!formData) {
@@ -57,14 +58,10 @@ export async function createExam(previousState: ExamState, formData: FormData): 
   redirect("/exam")
 }
 
-export async function examine(formData: FormData, examContent: string) {
-  const session = await getServerSession(authOptions)
-
-  if (session) {
-    const userId = session.user?.email
-    if (userId) examService.createUserExam(userId, examContent)
-  }
-
+export async function examine(
+  formData: FormData,
+  examContent: string,
+): Promise<ExamState | string> {
   const entries = formData.entries()
 
   console.log(entries)
@@ -79,9 +76,6 @@ export async function examine(formData: FormData, examContent: string) {
     answers.push(answer)
   }
 
-  console.log(answers)
-  console.log(examContent)
-
   const prompt = getCorrectionPrompt(examContent, answers)
 
   // Comprobar corrección con gpt
@@ -89,9 +83,31 @@ export async function examine(formData: FormData, examContent: string) {
 
   console.log(correction)
 
-  if (session) {
-    const userId = session.user?.email
-    if (userId) examService.saveCorrection(userId, correction)
+  const session = await getServerSession(authOptions)
+  const userEmail = session?.user?.email
+
+  // Guardar el examen y el resultado
+  if (session && userEmail) {
+    const userId = await userService.getUserIdFromEmail(userEmail)
+    if (!userId) {
+      return {
+        success: false,
+        error: {
+          code: "USER_NOT_FOUND",
+          message: "No se encontro al usuario.",
+        },
+      }
+    }
+    const exam = await examService.createExam(userId, examContent, correction)
+    if (!exam) {
+      return {
+        success: false,
+        error: {
+          code: "EXAM_NOT_CREATED",
+          message: "No se pudo guardar el examen.",
+        },
+      }
+    }
   }
 
   return correction
