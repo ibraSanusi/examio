@@ -4,9 +4,18 @@ import remarkGfm from "remark-gfm"
 import Link from "next/link"
 
 export default async function CorrectionPage() {
+  const LinkComponent = () => (
+    <Link
+      className="bg-purple hover:bg-yellow w-fit rounded-lg p-2 font-semibold text-white"
+      href={"/"}
+    >
+      Ir a Home
+    </Link>
+  )
+
   const cookieStore = await cookies()
-  const correctionHeaderCookieScore = cookieStore.get("correction")
-  const correction = correctionHeaderCookieScore?.value
+  const correctionCookie = cookieStore.get("correction")
+  const correction = correctionCookie?.value
 
   if (!correction) {
     const correctionErrorCookie = cookieStore.get("correction-error")
@@ -15,12 +24,15 @@ export default async function CorrectionPage() {
     return (
       <div>
         <p className="text-red text-2xl">{errorMessage}</p>
-        <Link className="bg-red hover:bg-light-black rounded-md p-2" href={"/"}>
-          Ir a Home
-        </Link>
+        <LinkComponent />
       </div>
     )
   }
 
-  return <MDXRemote source={correction} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+  return (
+    <div className="flex flex-col gap-4">
+      <MDXRemote source={correction} options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }} />
+      <LinkComponent />
+    </div>
+  )
 }
