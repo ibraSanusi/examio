@@ -5,7 +5,7 @@ import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies"
 
 const EXAMS_REQUESTS_LEFT = "exams-requests-left"
 const EXAMS_REQUESTS_LEFT_IN_SESSION = "exams-requests-left-in-session"
-const EXAM_LIMIT_IN_SESSION = 100
+const EXAM_LIMIT_IN_SESSION = 20
 const EXAM_LIMIT_NOT_IN_SESSION = 3
 
 export async function decreaseExamsRequests(
