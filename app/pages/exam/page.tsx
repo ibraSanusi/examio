@@ -7,7 +7,7 @@ import {
 } from "@/app/pages/exam/components/MdxComponents"
 import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
-import { getScore } from "@/app/actions"
+import { examine } from "@/app/actions"
 import { redirect } from "next/navigation"
 
 const components = {
@@ -28,12 +28,12 @@ export default async function ExamPage() {
 
   const checkExam = async (formData: FormData) => {
     "use server"
-    const score = await getScore(formData, examContent)
+    const correction = await examine(formData, examContent)
 
     const cookieStore = await cookies()
-    cookieStore.set("score", score, { httpOnly: true, expires: 60 * 60 })
+    cookieStore.set("correction", correction, { httpOnly: true, expires: 60 * 60 })
 
-    redirect("/score")
+    redirect("/correction")
   }
 
   return (

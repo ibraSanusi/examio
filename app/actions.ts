@@ -7,6 +7,9 @@ import { redirect } from "next/navigation"
 import { cookies } from "next/headers"
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies"
 import { decreaseExamsRequests } from "@/lib/rate-limit"
+import { getServerSession } from "next-auth"
+import { examService } from "@/services/api/examService"
+import { authOptions } from "@/lib"
 
 export async function createExam(previousState: ExamState, formData: FormData): Promise<ExamState> {
   if (!formData) {
@@ -54,8 +57,14 @@ export async function createExam(previousState: ExamState, formData: FormData): 
   redirect("/exam")
 }
 
-export async function getScore(formData: FormData, examContent: string) {
-  // TODO: guardar el examen en la base de datos
+export async function examine(formData: FormData, examContent: string) {
+  const session = await getServerSession(authOptions)
+
+  if (session) {
+    const userId = session.user?.email
+    if (userId) examService.createUserExam(userId, examContent)
+  }
+
   const entries = formData.entries()
 
   console.log(entries)
@@ -76,11 +85,14 @@ export async function getScore(formData: FormData, examContent: string) {
   const prompt = getCorrectionPrompt(examContent, answers)
 
   // Comprobar corrección con gpt
-  const score = await gptService.ask(prompt)
+  const correction = await gptService.ask(prompt)
 
-  console.log(score)
+  console.log(correction)
 
-  return score
+  if (session) {
+    const userId = session.user?.email
+    if (userId) examService.saveCorrection(userId, correction)
+  }
 
-  // TODO: guardar la nota del examen.
+  return correction
 }

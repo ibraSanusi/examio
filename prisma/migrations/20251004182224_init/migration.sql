@@ -72,6 +72,7 @@ CREATE TABLE "public"."Exam" (
     "id_examen" TEXT NOT NULL,
     "chat_examen" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "score" DOUBLE PRECISION NOT NULL,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "Exam_pkey" PRIMARY KEY ("id_examen")
