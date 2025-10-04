@@ -28,9 +28,15 @@ export default async function ExamPage() {
 
   const checkExam = async (formData: FormData) => {
     "use server"
+    const cookieStore = await cookies()
     const correction = await examine(formData, examContent)
 
-    const cookieStore = await cookies()
+    if (typeof correction !== "string") {
+      const message = correction.error?.message ?? "Error interno"
+      cookieStore.set("correction-error", message, { httpOnly: true })
+      redirect("/correction")
+    }
+
     cookieStore.set("correction", correction, { httpOnly: true, expires: 60 * 60 })
 
     redirect("/correction")
