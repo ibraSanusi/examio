@@ -17,8 +17,8 @@ const nextConfig: NextConfig = {
         destination: "/pages/exam",
       },
       {
-        source: "/score",
-        destination: "/pages/score",
+        source: "/correction",
+        destination: "/pages/correction",
       },
     ]
   },
