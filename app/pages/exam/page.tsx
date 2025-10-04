@@ -9,6 +9,7 @@ import { MDXRemote } from "next-mdx-remote/rsc"
 import remarkGfm from "remark-gfm"
 import { examine } from "@/app/actions"
 import { redirect } from "next/navigation"
+import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies"
 
 const components = {
   ShortAnswer,
@@ -28,16 +29,21 @@ export default async function ExamPage() {
 
   const checkExam = async (formData: FormData) => {
     "use server"
+    const cookieOptions: Partial<ResponseCookie> = {
+      httpOnly: true,
+      maxAge: Date.now() + 86400000, // un día
+    }
     const cookieStore = await cookies()
     const correction = await examine(formData, examContent)
 
     if (typeof correction !== "string") {
       const message = correction.error?.message ?? "Error interno"
-      cookieStore.set("correction-error", message, { httpOnly: true })
+
+      cookieStore.set("correction-error", message, cookieOptions)
       redirect("/correction")
     }
 
-    cookieStore.set("correction", correction, { httpOnly: true, expires: 60 * 60 })
+    cookieStore.set("correction", correction, cookieOptions)
 
     redirect("/correction")
   }
