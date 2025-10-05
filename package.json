@@ -44,6 +44,7 @@
         "next": "15.5.2",
         "next-auth": "^4.24.11",
         "next-mdx-remote": "^5.0.0",
+        "next-mdx-remote-client": "^2.1.6",
         "openai": "^5.19.1",
         "remark": "^15.0.1",
         "remark-gfm": "^4.0.1",

@@ -20,6 +20,10 @@ const nextConfig: NextConfig = {
         source: "/correction",
         destination: "/pages/correction",
       },
+      {
+        source: "/dashboard",
+        destination: "/pages/dashboard",
+      },
     ]
   },
 
