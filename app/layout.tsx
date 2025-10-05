@@ -31,9 +31,9 @@ export default function RootLayout({
           </main>
 
           <NavBar>
-            <NavBarItem>Home</NavBarItem>
-            <NavBarItem>Exam</NavBarItem>
-            <NavBarItem>Settings</NavBarItem>
+            <NavBarItem href="/">Home</NavBarItem>
+            <NavBarItem href="/dashboard">Exams</NavBarItem>
+            <NavBarItem href="/settings">Settings</NavBarItem>
           </NavBar>
         </section>
       </body>
