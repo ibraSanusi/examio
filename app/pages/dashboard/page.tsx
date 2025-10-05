@@ -15,7 +15,7 @@ export default async function DashboardPage() {
   const exams = await examService.getExamsByUserId(userId)
 
   const mdxSources: SerializeResult[] = await Promise.all(
-    exams.map((exam) => serialize({ source: exam.chat_examen })),
+    exams.map((exam) => serialize({ source: exam.chat_examen + exam.correction })),
   )
 
   return (
