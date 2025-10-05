@@ -10,6 +10,7 @@ import remarkGfm from "remark-gfm"
 import { examine } from "@/app/actions"
 import { redirect } from "next/navigation"
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies"
+import Button from "@/components/ui/button"
 
 const components = {
   ShortAnswer,
@@ -55,12 +56,7 @@ export default async function ExamPage() {
         components={components}
         options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
       />
-      <button
-        className="bg-purple hover:bg-yellow rounded-lg p-2 font-semibold text-white"
-        type="submit"
-      >
-        Enviar
-      </button>
+      <Button type="submit">Enviar</Button>
     </form>
   )
 }
