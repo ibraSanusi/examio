@@ -17,6 +17,5 @@ export const userService = {
       method: "PUT",
       body: JSON.stringify({ userId, values }),
     })
-    return await fetch("")
   },
 }
