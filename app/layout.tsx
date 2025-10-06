@@ -8,6 +8,7 @@ import { baloo_2 } from "@/lib/fonts"
 import NavBarItem from "@/components/ui/nav-bar-item"
 import NavBar from "@/components/ui/nav-bar"
 import Header from "@/components/ui/header"
+import { Toaster } from "@/components/ui/sonner"
 
 export const metadata: Metadata = {
   title: "examio",
@@ -36,6 +37,7 @@ export default function RootLayout({
             <NavBarItem href="/settings">Settings</NavBarItem>
           </NavBar>
         </section>
+        <Toaster />
       </body>
     </html>
   )

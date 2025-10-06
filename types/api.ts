@@ -21,3 +21,10 @@ export type ByExamIdParamsType = {
     examId: string
   }
 }
+
+export type UpdateUserType = {
+  name: string
+  username: string
+  age: string
+  grade: string
+}

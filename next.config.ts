@@ -24,6 +24,10 @@ const nextConfig: NextConfig = {
         source: "/dashboard",
         destination: "/pages/dashboard",
       },
+      {
+        source: "/settings",
+        destination: "/pages/settings",
+      },
     ]
   },
 
