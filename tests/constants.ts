@@ -16,15 +16,16 @@ export const bodyValid = {
   ],
 }
 
-export const bodyNotValid = {
+export const BODY_NOT_VALID = {
   grade: 2,
   subject: 5,
   topics: {},
 }
 
-export const examResponse: Exam | null = {
+export const EXAM_RESPONSE: Exam | null = {
   id_examen: "exam_id1234",
   chat_examen: "Examen cualquiera",
   createdAt: new Date(),
   userId: "pepito_id_39424",
+  correction: "Esta es la corrección del examamen",
 }
