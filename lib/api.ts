@@ -54,7 +54,7 @@ Genera el examen siguiendo exactamente este formato.
 }
 
 type CorrectionAnswerType = {
-  [key: string]: string
+  [key: string]: FormDataEntryValue
 }
 
 export function getCorrectionPrompt(
