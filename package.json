@@ -10,7 +10,7 @@
         "migrate:db": "npx prisma migrate dev --name",
         "studio:db": "npx prisma studio",
         "lint": "eslint . --fix",
-        "postinstall": "prisma generate",
+        "postinstall": "npx prisma generate",
         "test": "jest --verbose --watch tests/exams.test.ts",
         "seed": "npx tsx prisma/seed.ts"
     },
