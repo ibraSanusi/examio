@@ -4,13 +4,13 @@
     "private": true,
     "scripts": {
         "dev": "next dev --turbopack",
-        "build": "npx prisma generate && next build --turbopack",
+        "build": "npx prisma generate --no-engine && next build --turbopack",
         "start": "next start",
         "generate:db": "npx prisma generate",
         "migrate:db": "npx prisma migrate dev --name",
         "studio:db": "npx prisma studio",
         "lint": "eslint . --fix",
-        "postinstall": "npx prisma generate",
+        "postinstall": "npx prisma generate --no-engine",
         "test": "jest --verbose --watch tests/exams.test.ts",
         "seed": "npx tsx prisma/seed.ts"
     },
