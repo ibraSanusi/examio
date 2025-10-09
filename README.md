@@ -1,23 +1,23 @@
-
 # Next Fullstack Starter Template
 
 Un template base para **Next.js + TypeScript + Prisma + NextAuth + TailwindCSS**, listo para desarrollo de MVPs y proyectos fullstack.
 
-Incluye:  
-- Next.js 14+ con TypeScript  
-- TailwindCSS configurado  
-- Prisma ORM con Postgres (o SQLite en desarrollo)  
-- NextAuth para autenticación de usuarios  
-- ESLint + Prettier + plugin de Tailwind para mantener buenas prácticas y consistencia  
-- Ejemplo de rewrites en `next.config.ts`  
+Incluye:
+
+- Next.js 14+ con TypeScript
+- TailwindCSS configurado
+- Prisma ORM con Postgres (o SQLite en desarrollo)
+- NextAuth para autenticación de usuarios
+- ESLint + Prettier + plugin de Tailwind para mantener buenas prácticas y consistencia
+- Ejemplo de rewrites en `next.config.ts`
 
 ---
 
 ## 📦 Requisitos
 
-- Node.js >= 18  
-- pnpm (recomendado)  
-- PostgreSQL (opcional para producción; SQLite para desarrollo rápido)  
+- Node.js >= 18
+- pnpm (recomendado)
+- PostgreSQL (opcional para producción; SQLite para desarrollo rápido)
 
 ---
 
@@ -34,20 +34,20 @@ pnpm install
 # Crear archivo .env
 cp .env.example .env
 # Edita las variables según tu entorno
-````
+```
 
 ---
 
 ## 🗂 Variables de entorno
 
 ```env
-DATABASE_URL="postgresql://usuario:password@localhost:5432/mi_db"
+PRISMA_DATABASE_URL="postgresql://usuario:password@localhost:5432/mi_db"
 NEXTAUTH_SECRET="una_clave_secreta_segura"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
 > Para desarrollo rápido puedes usar SQLite cambiando:
-> `DATABASE_URL="file:./dev.db"` en `.env`.
+> `PRISMA_DATABASE_URL="file:./dev.db"` en `.env`.
 
 ---
 
@@ -70,28 +70,27 @@ pnpm prisma db seed
 
 ## 🔐 NextAuth
 
-* Configurado con **adapter Prisma**.
-* Tablas: `User`, `Account`, `Session`, `VerificationRequest`.
-* Listo para OAuth (Google, GitHub, etc.) o autenticación por email.
+- Configurado con **adapter Prisma**.
+- Tablas: `User`, `Account`, `Session`, `VerificationRequest`.
+- Listo para OAuth (Google, GitHub, etc.) o autenticación por email.
 
 ---
 
 ## 🎨 TailwindCSS
 
-* Configuración base lista (`tailwind.config.js`).
-* Plugin ESLint para **reordenar clases automáticamente**.
-* Compatible con `@apply` y todas las utilidades de Tailwind.
+- Configuración base lista (`tailwind.config.js`).
+- Plugin ESLint para **reordenar clases automáticamente**.
+- Compatible con `@apply` y todas las utilidades de Tailwind.
 
 ---
 
 ## 🧹 ESLint + Prettier
 
-* Formato y linting automáticos al guardar en VSCode.
-* Reglas configuradas para:
-
-  * Next.js + TypeScript
-  * React y React Hooks
-  * TailwindCSS (clases ordenadas)
+- Formato y linting automáticos al guardar en VSCode.
+- Reglas configuradas para:
+  - Next.js + TypeScript
+  - React y React Hooks
+  - TailwindCSS (clases ordenadas)
 
 ---
 
@@ -140,8 +139,8 @@ Abre [http://localhost:3000](http://localhost:3000) para ver tu proyecto.
 
 ## 📌 Notas finales
 
-* Carpeta vacía → agrega `.gitkeep` si quieres que se mantenga al clonar.
-* Para producción, usa **PostgreSQL**; para desarrollo rápido, **SQLite** funciona bien.
-* Puedes añadir nuevas tablas en `prisma/schema.prisma` y ejecutar `pnpm prisma migrate dev`.
+- Carpeta vacía → agrega `.gitkeep` si quieres que se mantenga al clonar.
+- Para producción, usa **PostgreSQL**; para desarrollo rápido, **SQLite** funciona bien.
+- Puedes añadir nuevas tablas en `prisma/schema.prisma` y ejecutar `pnpm prisma migrate dev`.
 
 ---
