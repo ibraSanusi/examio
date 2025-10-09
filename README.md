@@ -41,13 +41,13 @@ cp .env.example .env
 ## 🗂 Variables de entorno
 
 ```env
-PRISMA_DATABASE_URL="postgresql://usuario:password@localhost:5432/mi_db"
+DATABASE_URL_API="postgresql://usuario:password@localhost:5432/mi_db"
 NEXTAUTH_SECRET="una_clave_secreta_segura"
 NEXTAUTH_URL="http://localhost:3000"
 ```
 
 > Para desarrollo rápido puedes usar SQLite cambiando:
-> `PRISMA_DATABASE_URL="file:./dev.db"` en `.env`.
+> `DATABASE_URL_API="file:./dev.db"` en `.env`.
 
 ---
 
