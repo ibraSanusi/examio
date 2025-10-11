@@ -5,7 +5,6 @@ import Providers from "./providers"
 import Noise from "@/components/ui/noise"
 
 import { baloo_2 } from "@/lib/fonts"
-import NavBarItem from "@/components/ui/nav-bar-item"
 import NavBar from "@/components/ui/nav-bar"
 import Header from "@/components/ui/header"
 import { Toaster } from "@/components/ui/sonner"
@@ -30,11 +29,7 @@ export default function RootLayout({
 
             <main>{children}</main>
 
-            <NavBar>
-              <NavBarItem href="/">Home</NavBarItem>
-              <NavBarItem href="/dashboard">Exams</NavBarItem>
-              <NavBarItem href="/settings">Settings</NavBarItem>
-            </NavBar>
+            <NavBar />
           </Providers>
         </section>
         <Toaster />
