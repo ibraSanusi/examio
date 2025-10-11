@@ -145,6 +145,22 @@
   z-index: -1;
 }
 
+.button-after::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--purple);
+  border-radius: 4px;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.button-after:active {
+  scale: 90%;
+}
+
 @keyframes fade-in-lottie {
   0% {
     opacity: 0%;
