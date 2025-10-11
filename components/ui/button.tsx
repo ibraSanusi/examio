@@ -8,10 +8,15 @@ type ButtonProps = {
 export default function Button({
   children,
   className,
-}: ButtonProps & ButtonHTMLAttributes<ButtonProps>) {
+  ...props
+}: ButtonProps & ButtonHTMLAttributes<HTMLButtonElement>) {
   return (
     <button
-      className={cn("bg-purple hover:bg-yellow rounded-lg p-2 font-semibold text-white", className)}
+      {...props}
+      className={cn(
+        "bg-purple hover:bg-yellow cursor-pointer rounded-lg p-2 font-semibold text-white",
+        className,
+      )}
     >
       {children}
     </button>
