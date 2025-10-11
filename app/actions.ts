@@ -13,7 +13,7 @@ import { authOptions } from "@/lib"
 import { userService } from "@/services/api/userService"
 
 export async function createExam(previousState: ExamState, formData: FormData): Promise<ExamState> {
-  if (!formData) {
+  if (!formData || !formData.entries().toArray().length) {
     return { success: false, error: { code: "NO_FORM_DATA", message: "No hay formData." } }
   }
 
@@ -22,10 +22,18 @@ export async function createExam(previousState: ExamState, formData: FormData): 
 
   for (const [key, value] of entries) {
     exam.subject = exam.subject || key
+    console.log("valueof: ", value.toString())
     exam.topics.push(value.toString())
   }
 
   console.log(exam)
+
+  if (!exam.subject) {
+    return {
+      success: false,
+      error: { code: "NO_CONTENT", message: "No se ha elegido ningúna asignatura." },
+    }
+  }
 
   const { grade, subject, topics } = exam
 
