@@ -25,17 +25,17 @@ export default function RootLayout({
       <body className="relative min-h-screen w-full" suppressHydrationWarning>
         <Noise />
         <section className="m-auto w-full max-w-7xl space-y-8 p-8">
-          <Header />
+          <Providers>
+            <Header />
 
-          <main>
-            <Providers>{children}</Providers>
-          </main>
+            <main>{children}</main>
 
-          <NavBar>
-            <NavBarItem href="/">Home</NavBarItem>
-            <NavBarItem href="/dashboard">Exams</NavBarItem>
-            <NavBarItem href="/settings">Settings</NavBarItem>
-          </NavBar>
+            <NavBar>
+              <NavBarItem href="/">Home</NavBarItem>
+              <NavBarItem href="/dashboard">Exams</NavBarItem>
+              <NavBarItem href="/settings">Settings</NavBarItem>
+            </NavBar>
+          </Providers>
         </section>
         <Toaster />
       </body>
