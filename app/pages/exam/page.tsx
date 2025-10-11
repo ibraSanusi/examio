@@ -11,13 +11,19 @@ import { examine } from "@/app/actions"
 import { redirect } from "next/navigation"
 import { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies"
 import Button from "@/components/ui/button"
+import { ReactNode } from "react"
+import { MDXComponents } from "next-mdx-remote-client"
 
 const components = {
+  h2: ({ children }: { children: ReactNode }) => <h2 className="text-3xl">{children}</h2>,
+  li: ({ children }: { children: ReactNode }) => (
+    <li className="list-decimal text-xl">{children}</li>
+  ),
   ShortAnswer,
   Essay,
   MultipleChoice,
   TrueFalse,
-}
+} satisfies MDXComponents
 
 export default async function ExamPage() {
   const cookieStore = await cookies()
@@ -50,13 +56,15 @@ export default async function ExamPage() {
   }
 
   return (
-    <form action={checkExam}>
+    <form className="flex flex-col gap-4 px-4 py-3" action={checkExam}>
       <MDXRemote
         source={examContent}
         components={components}
         options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
       />
-      <Button type="submit">Enviar</Button>
+      <Button className="w-full max-w-24 self-end active:scale-90" type="submit">
+        Enviar
+      </Button>
     </form>
   )
 }
