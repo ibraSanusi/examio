@@ -1,6 +1,6 @@
 "use client"
 
-import React, { ReactNode } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import StainIcon from "./stain-icon"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -12,7 +12,20 @@ const PATHNAMES = {
 }
 
 export default function NavBar() {
-  return (
+  const [showMenuBar, setShowMenubar] = useState(false)
+
+  const handleMenuBarVisibility = () => {
+    setShowMenubar(true)
+  }
+
+  useEffect(() => {
+    if (!showMenuBar) return
+    const interval = setTimeout(() => setShowMenubar(false), 5000)
+
+    console.log(interval)
+  }, [showMenuBar])
+
+  return showMenuBar ? (
     <nav className="fixed top-[calc(100%-100px)] left-1/2 m-auto flex w-[300px] max-w-4xl -translate-x-1/2 transform justify-between rounded-md bg-black px-4 py-2">
       <NavBarItem path={PATHNAMES.home} href="/">
         Home
@@ -24,6 +37,11 @@ export default function NavBar() {
         Settings
       </NavBarItem>
     </nav>
+  ) : (
+    <button
+      onClick={handleMenuBarVisibility}
+      className="repeat-infinite animate-ball-alert fixed top-[calc(100%-60px)] size-7 rounded-full bg-black duration-[5000s]"
+    ></button>
   )
 }
 
@@ -36,7 +54,6 @@ interface NavBarItemProps {
 function NavBarItem({ children, path, href }: NavBarItemProps) {
   const currentPath = usePathname()
 
-  console.log(currentPath, path)
   const isInCurrentPath = path === currentPath
 
   return (
