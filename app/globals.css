@@ -15,6 +15,7 @@
   --color-dark-brown-gray: #e8ddd0;
 
   --animate-fade-in-lottie: fade-in-lottie ease-in 0.5s;
+  --animate-ball-alert: ball-alert ease-in 3s infinite;
 }
 
 :root {
@@ -168,5 +169,21 @@
 
   100% {
     opacity: 80%;
+  }
+}
+
+@keyframes ball-alert {
+  0% {
+    scale: 90%;
+  }
+
+  50% {
+    scale: 100%;
+    background-color: var(--purple);
+    opacity: 90%;
+  }
+
+  100% {
+    scale: 90%;
   }
 }
