@@ -1,18 +1,17 @@
-import { NextRequest, NextResponse } from "next/server"
-import { getToken } from "next-auth/jwt"
+import withAuth from "next-auth/middleware"
+import { authOptions } from "./lib"
 
 export const config = {
   matcher: ["/dashboard", "/settings"],
 }
 
-export async function middleware(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
-
-  console.log("token: ", token)
-
-  if (token) {
-    return NextResponse.next()
-  }
-
-  return NextResponse.redirect(new URL("/pages/auth/login", req.url))
-}
+export default withAuth({
+  pages: {
+    signIn: "/login",
+    error: "/error",
+  },
+  jwt: { decode: authOptions.jwt?.decode },
+  callbacks: {
+    authorized: ({ token }) => !!token,
+  },
+})
