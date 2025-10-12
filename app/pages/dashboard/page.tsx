@@ -19,7 +19,7 @@ export default async function DashboardPage() {
   )
 
   return (
-    <section className="grid grid-cols-3 gap-4">
+    <section className="grid grid-cols-1 gap-4 md:grid-cols-3">
       {mdxSources.map((mdxSource, index) => {
         return <Card exam={exams[index]} key={index} mdxSource={mdxSource} />
       })}
