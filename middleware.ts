@@ -1,17 +1,42 @@
-import withAuth from "next-auth/middleware"
-import { authOptions } from "./lib"
+// middleware.ts
+import { withAuth } from "next-auth/middleware"
+import { NextResponse } from "next/server"
+
+export default withAuth(
+  function middleware(req) {
+    const token = req.nextauth.token
+    const { pathname } = req.nextUrl
+
+    // 🚫 Si NO hay token y está intentando acceder a páginas protegidas
+    if (
+      !token &&
+      ["/dashboard", "/settings", "/pages/dashboard", "/pages/settings"].includes(pathname)
+    ) {
+      return NextResponse.redirect(new URL("/login", req.url))
+    }
+
+    // ✅ Si hay token y está intentando ir al login, mándalo al home
+    if (token && pathname === "/login") {
+      return NextResponse.redirect(new URL("/", req.url))
+    }
+
+    // Si no entra en ningún caso anterior, continuar
+    return NextResponse.next()
+  },
+  {
+    callbacks: {
+      authorized: () => true, // Deja pasar a la función middleware
+    },
+  },
+)
 
 export const config = {
-  matcher: ["/dashboard", "/settings"],
+  matcher: [
+    "/dashboard",
+    "/settings",
+    "/pages/dashboard",
+    "/pages/settings",
+    "/login",
+    "/pages/auth/login",
+  ],
 }
-
-export default withAuth({
-  pages: {
-    signIn: "/login",
-    error: "/error",
-  },
-  jwt: { decode: authOptions.jwt?.decode },
-  callbacks: {
-    authorized: ({ token }) => !!token,
-  },
-})
