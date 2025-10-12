@@ -8,7 +8,8 @@ import { Save, TriangleAlert } from "lucide-react"
 import { useSettings } from "./hooks/useSettings"
 
 export default function SettingsPage() {
-  const { userData, loading, deleting, updating, handleUpdate, handleDeleteUser } = useSettings()
+  const { userData, loading, deleting, updating, handleUpdateUser, handleDeleteUser } =
+    useSettings()
 
   if (loading) return <p>Cargando tus datos...</p>
 
@@ -17,7 +18,7 @@ export default function SettingsPage() {
       <section className="space-y-4">
         <form
           className="border-purple/50 flex flex-col gap-2 rounded-md border-[1px] p-4"
-          onSubmit={handleUpdate}
+          onSubmit={handleUpdateUser}
         >
           <h2 className="text-2xl">General</h2>
           <div className="gag-2 flex flex-col">

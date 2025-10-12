@@ -27,7 +27,7 @@ export function useSettings() {
       .catch((err) => toast(err))
   }, [])
 
-  const handleUpdate: FormEventHandler<HTMLFormElement> = async (e) => {
+  const handleUpdateUser: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
     const currentTarget: HTMLFormElement = e.currentTarget
@@ -85,7 +85,7 @@ export function useSettings() {
     userData,
     deleting,
     updating,
-    handleUpdate,
+    handleUpdateUser,
     handleDeleteUser,
   }
 }
