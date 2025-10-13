@@ -20,9 +20,7 @@ export default function NavBar() {
 
   useEffect(() => {
     if (!showMenuBar) return
-    const interval = setTimeout(() => setShowMenubar(false), 5000)
-
-    console.log(interval)
+    setTimeout(() => setShowMenubar(false), 5000)
   }, [showMenuBar])
 
   return showMenuBar ? (
@@ -40,7 +38,7 @@ export default function NavBar() {
   ) : (
     <button
       onClick={handleMenuBarVisibility}
-      className="repeat-infinite animate-ball-alert fixed top-[calc(100%-60px)] size-7 rounded-full bg-black duration-[5000s]"
+      className="repeat-infinite animate-ball-alert fixed top-[calc(100%-58px)] right-[calc(100%-60px)] size-10 rounded-full bg-black duration-[5000s]"
     ></button>
   )
 }
