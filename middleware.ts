@@ -7,15 +7,11 @@ export default withAuth(
     const token = req.nextauth.token
     const { pathname } = req.nextUrl
 
-    console.log("toke before if: ", token)
-
     // 🚫 Si NO hay token y está intentando acceder a páginas protegidas
     if (
       !token &&
       ["/dashboard", "/settings", "/pages/dashboard", "/pages/settings"].includes(pathname)
     ) {
-      console.log("pathname: ", pathname)
-      console.log("token: ", token)
       return NextResponse.redirect(new URL("/login", req.url))
     }
 
