@@ -8,6 +8,7 @@ import { baloo_2 } from "@/lib/fonts"
 import NavBar from "@/components/ui/nav-bar"
 import Header from "@/components/ui/header"
 import { Toaster } from "@/components/ui/sonner"
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: "examio",
@@ -34,6 +35,7 @@ export default function RootLayout({
         </section>
         <Toaster />
       </body>
+      <Analytics/>
     </html>
   )
 }
