@@ -12,8 +12,6 @@ export default function GradeForm({ grade, i }: GradeFormProps) {
   const [state, action, isLoading] = useActionState(createExam, initialState)
   const [topics, setTopics] = useState<string[]>([])
 
-  console.log("isLoading: ", isLoading)
-
   if (isLoading) return <CreatingExam />
   if (!state.success) return <p className="text-4xl text-red-500">{state.error?.message}</p>
 
