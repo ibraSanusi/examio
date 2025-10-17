@@ -28,6 +28,10 @@ const nextConfig: NextConfig = {
         source: "/settings",
         destination: "/pages/settings",
       },
+      {
+        source: "/donation",
+        destination: "/pages/donation",
+      },
     ]
   },
 
