@@ -28,6 +28,18 @@ const nextConfig: NextConfig = {
         source: "/settings",
         destination: "/pages/settings",
       },
+      {
+        source: "/donation",
+        destination: "/pages/donation",
+      },
+      {
+        source: "/donation/success",
+        destination: "/pages/donation/success",
+      },
+      {
+        source: "/donation/error",
+        destination: "/pages/donation/error",
+      },
     ]
   },
 
