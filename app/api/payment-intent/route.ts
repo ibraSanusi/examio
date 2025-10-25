@@ -6,9 +6,14 @@ import Stripe from "stripe"
 const stripe = new Stripe(process.env.STRIPE_SK ?? "")
 
 export async function POST(req: NextRequest) {
-  const quantity = Number(await req.text())
+  const quantity = await req.text()
 
-  if (!quantity) {
+  const regex = /\D/g
+  const quantityWithoutSymbols = quantity.replace(regex, "")
+
+  console.log({ quantityWithoutSymbols })
+
+  if (!quantityWithoutSymbols) {
     const errorResponse: ApiResponseError = generateErrorResponse(
       "NO_PRICE_INDICATED",
       "No se ha añadido una cantidad de donación.",
@@ -18,7 +23,7 @@ export async function POST(req: NextRequest) {
   }
 
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: Number(quantity),
+    amount: Number(quantityWithoutSymbols),
     currency: "eur",
     // automatic_payment_methods: { enabled: false },
     payment_method_types: ["card"],
