@@ -9,3 +9,14 @@ export function formatCreateExamBody(formData: FormData) {
 
   return exam
 }
+
+export function formatNumberEU(x: number) {
+  const calculated = x / 100
+  const formatted = calculated.toLocaleString("es-ES", {
+    minimumIntegerDigits: 2,
+    maximumFractionDigits: 2,
+    minimumFractionDigits: 2,
+  })
+
+  return formatted
+}
