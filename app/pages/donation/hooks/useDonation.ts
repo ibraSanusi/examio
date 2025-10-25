@@ -59,10 +59,12 @@ export function useDonation() {
   const handleInputChange: ChangeEventHandler<HTMLInputElement> | undefined = (e) => {
     const { value } = e.currentTarget
 
-    setQuantityInputText(value)
-  }
+    const regex = /\D/g
 
-  console.log({ quantityInputText })
+    const noSymbolsValue = value.replace(regex, "")
+
+    setQuantityInputText(noSymbolsValue)
+  }
 
   return {
     handleIntentSubmit,
