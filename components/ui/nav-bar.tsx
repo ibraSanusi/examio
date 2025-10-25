@@ -37,6 +37,7 @@ export default function NavBar() {
     </nav>
   ) : (
     <button
+      aria-label="Show bottom menu bar"
       onClick={handleMenuBarVisibility}
       className="repeat-infinite animate-ball-alert fixed top-[calc(100%-58px)] right-[calc(100%-60px)] size-10 rounded-full bg-black duration-[5000s]"
     ></button>
